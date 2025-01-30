@@ -23,11 +23,11 @@ class Book
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $series = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $genre2 = null;
-
     #[ORM\Column(length: 255)]
     private ?string $genre1 = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $genre2 = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $subGenre = null;
@@ -94,18 +94,6 @@ class Book
         return $this;
     }
 
-    public function getGenre2(): ?string
-    {
-        return $this->genre2;
-    }
-
-    public function setGenre2(?string $genre2): static
-    {
-        $this->genre2 = $genre2;
-
-        return $this;
-    }
-
     public function getGenre1(): ?string
     {
         return $this->genre1;
@@ -114,6 +102,18 @@ class Book
     public function setGenre1(string $genre1): static
     {
         $this->genre1 = $genre1;
+
+        return $this;
+    }
+
+    public function getGenre2(): ?string
+    {
+        return $this->genre2;
+    }
+
+    public function setGenre2(?string $genre2): static
+    {
+        $this->genre2 = $genre2;
 
         return $this;
     }
