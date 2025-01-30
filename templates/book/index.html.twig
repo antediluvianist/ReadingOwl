@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Book index{% endblock %}
+
+{% block body %}
+    <h1>Book index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>YearRead</th>
+                <th>Title</th>
+                <th>Series</th>
+                <th>Genre2</th>
+                <th>Genre1</th>
+                <th>SubGenre</th>
+                <th>Tag1</th>
+                <th>Tag2</th>
+                <th>Tag3</th>
+                <th>Comment1</th>
+                <th>Comment2</th>
+                <th>Author</th>
+                <th>Rating</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for book in books %}
+            <tr>
+                <td>{{ book.id }}</td>
+                <td>{{ book.yearRead }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.series }}</td>
+                <td>{{ book.genre2 }}</td>
+                <td>{{ book.genre1 }}</td>
+                <td>{{ book.subGenre }}</td>
+                <td>{{ book.tag1 }}</td>
+                <td>{{ book.tag2 }}</td>
+                <td>{{ book.tag3 }}</td>
+                <td>{{ book.comment1 }}</td>
+                <td>{{ book.comment2 }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.rating }}</td>
+                <td>
+                    <a href="{{ path('app_book_show', {'id': book.id}) }}">show</a>
+                    <a href="{{ path('app_book_edit', {'id': book.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="15">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_book_new') }}">Create new</a>
+{% endblock %}
