@@ -1,15 +1,26 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
-    secret: '%env(APP_SECRET)%'
+  secret: "%env(APP_SECRET)%"
+  trusted_proxies: "127.0.0.1" # <--
 
-    # Note that the session will be started ONLY if you read or write from it.
-    session: true
+  trusted_headers:
+    - "x-forwarded-for"
+    - "x-forwarded-host"
+    - "x-forwarded-proto"
+    - "x-forwarded-port"
+    - "x-forwarded-prefix"
 
-    #esi: true
-    #fragments: true
+  # Note that the session will be started ONLY if you read or write from it.
+  session: true
+
+  # Configuration pour corriger le chargement des assets Swagger UI
+  assets:
+    packages:
+      apiplatform:
+        base_path: "/assets/bundles/apiplatform"
 
 when@test:
-    framework:
-        test: true
-        session:
-            storage_factory_id: session.storage.factory.mock_file
+  framework:
+    test: true
+    session:
+      storage_factory_id: session.storage.factory.mock_file
