@@ -24,3 +24,26 @@ export const addBook = async (bookData) => {
     return null;
   }
 };
+
+export const deleteBook = async (bookId) => {
+  try {
+    await axios.delete(`${API_BASE_URL}/books/${bookId}`);
+    return true;
+  } catch (error) {
+    console.error("Erreur lors de la suppression du livre :", error);
+    return false;
+  }
+};
+
+export const updateBook = async (bookId, updatedData) => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}/books/${bookId}`, updatedData, {
+      headers: { "Content-Type": "application/ld+json" },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du livre :", error);
+    return null;
+  }
+};
+
