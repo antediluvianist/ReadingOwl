@@ -1,10 +1,20 @@
 import { useEffect, useState } from "react";
 import { getBooks, addBook, deleteBook, updateBook } from "../services/api";
 import BookCard from "../components/BookCard";
+import { searchBooks } from "../services/api";
 
 function Library() {
   const [books, setBooks] = useState([]);
   const [searchQuery, setSearchQuery] = useState(""); // État pour la recherche
+
+// TEST de recherche lors du chargement de la page avec Open Library API
+/* useEffect(() => {
+  const fetchData = async () => {
+    const books = await searchBooks("Dune");
+    console.log(books); // Vérifie le résultat dans la console
+  };
+  fetchData();
+}, []); */
 
   // Charger les livres depuis l'API au chargement de la page
   useEffect(() => {

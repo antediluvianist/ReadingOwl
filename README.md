@@ -15,7 +15,7 @@
 ## Présentation
 
 Projet personnel pour travailler **React** & **Symfony**.<br>
-🚧 *( Projet en cours de construction )* 🚧
+🚧 _( Projet en cours de construction )_ 🚧
 
 ## Problématique
 
@@ -38,11 +38,12 @@ Accomplissez aussi des objectifs et des défis de lecture pour gagner des points
 ✅ Gestion des routes API pour les opérations CRUD<br>
 ✅ Génération de la structure de base React<br>
 ✅ Connexion entre front et back<br>
+✅ Connexion avec Open Library API pour pré-remplir certains des champs et en ajouter d'autres<br>
 <br>
 🔄 Création des composants React<br>
+🔄 Design frontend
 🔄 Interface responsive pour utilisation mobile<br>
 <br>
-⏳ Connexion avec une API (Open Library API, Google Books API ou autres) pour pré-remplir certains des champs<br>
 ⏳ Système de missions/défis de lecture<br>
 ⏳ Système de score à partager<br>
 ⏳ Système de recommandation de lecture personalisée<br>
@@ -53,17 +54,20 @@ Accomplissez aussi des objectifs et des défis de lecture pour gagner des points
 ## Technologies utilisées
 
 ### ⚙️ Backend (Symfony)
+
 - Symfony 6
 - API Platform
 - Doctrine ORM
 - PostgreSQL
 
 ### 💻 Frontend (React)
+
 - React 19
 - Axios (pour les requêtes HTTP)
 - React Router
 
 ### 📦 Outils & Déploiement
+
 - Docker & Docker Compose
 - Composer & NPM
 - Git & GitHub
@@ -104,6 +108,3 @@ npm start
 npm install --legacy-peer-deps
 
 🔥🔥🔥
-
-
-

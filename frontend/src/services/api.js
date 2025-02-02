@@ -2,6 +2,36 @@ import axios from "axios";
 
 const API_BASE_URL = "http://localhost:8000/api";
 
+// Fonction pour rechercher des livres via l'API Open Library
+export const searchBooks = async (query) => {
+  try {
+    const response = await axios.get(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}`);
+    return response.data.docs.slice(0, 5); // On limite à 5 résultats pour ne pas noyer l'utilisateur sous un surplus d'informations
+  } catch (error) {
+    console.error("Erreur lors de la recherche de livres sur Open Library :", error);
+    return [];
+  }
+};
+
+// Fonction pour récupérer les détails d'un livre via Open Library
+export const fetchBookDetails = async (title) => {
+  try {
+    const response = await fetch(`https://openlibrary.org/search.json?title=${encodeURIComponent(title)}`);
+    const data = await response.json();
+
+    if (data.docs && data.docs.length > 0) {
+      return data.docs[0]; // Retourne le premier résultat trouvé
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Erreur lors de la récupération des détails du livre :", error);
+    return null;
+  }
+};
+
+
+
 // Fonction pour récupérer tous les livres
 export const getBooks = async () => {
   try {
