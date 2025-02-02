@@ -13,17 +13,18 @@ export const getBooks = async () => {
   };
   
 
-export const addBook = async (bookData) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/books`, bookData, {
-      headers: { "Content-Type": "application/json" },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Erreur lors de l'ajout du livre :", error);
-    return null;
-  }
-};
+  export const addBook = async (bookData) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/books`, bookData, {
+        headers: { "Content-Type": "application/ld+json" },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erreur lors de l'ajout du livre :", error);
+      return null;
+    }
+  };
+  
 
 export const deleteBook = async (bookId) => {
   try {

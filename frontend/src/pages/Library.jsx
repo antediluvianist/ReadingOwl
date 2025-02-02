@@ -19,12 +19,22 @@ function Library() {
   // Ajouter un livre via l'API
   const handleAddBook = async () => {
     if (!newBook) return;
-    const addedBook = await addBook({ title: newBook, author: "Auteur inconnu" });
+  
+    const newBookData = {
+      title: newBook,
+      author: "Auteur inconnu",
+      yearRead: new Date().getFullYear(), // Année de lecture par défaut
+      genre1: "Inconnu",                 // Genre par défaut
+      rating: 0,                         // Note par défaut
+    };
+  
+    const addedBook = await addBook(newBookData);
     if (addedBook) {
       setBooks([...books, addedBook]);
       setNewBook("");
     }
   };
+  
 
   // Supprimer un livre via l'API
   const handleDeleteBook = (bookId) => {
@@ -49,14 +59,7 @@ function Library() {
           onChange={(e) => setSearchQuery(e.target.value)}
           style={styles.input}
         />
-        <input
-          type="text"
-          placeholder="Ajouter un livre..."
-          value={newBook}
-          onChange={(e) => setNewBook(e.target.value)}
-          style={styles.input}
-        />
-        <button onClick={handleAddBook} style={styles.button}>Ajouter</button>
+        <button onClick={() => window.location.href = "/add-book"} style={styles.button}>Ajouter un Livre</button>
       </div>
       <div style={styles.grid}>
         {books
