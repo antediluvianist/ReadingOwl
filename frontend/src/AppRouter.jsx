@@ -4,6 +4,8 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Library from "./pages/Library";
 import AddBook from "./pages/AddBook";
+import ShowBook from "./pages/ShowBook";
+import UpdateBook from "./pages/UpdateBook";
 
 
 function AppRouter() {
@@ -15,6 +17,8 @@ function AppRouter() {
           <Route path="/about" element={<About />} />
           <Route path="/library" element={<Library />} />
           <Route path="/add-book" element={<AddBook />} />
+          <Route path="/book/:id" element={<ShowBook />} />
+          <Route path="/book/:id/update" element={<UpdateBook />} />
         </Routes>
       </Router>
     );

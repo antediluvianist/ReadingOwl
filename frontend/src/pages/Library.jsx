@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { getBooks, addBook } from "../services/api";
+import { getBooks, addBook, deleteBook, updateBook } from "../services/api";
 import BookCard from "../components/BookCard";
 
 function Library() {
   const [books, setBooks] = useState([]);
-  const [newBook, setNewBook] = useState("");
   const [searchQuery, setSearchQuery] = useState(""); // État pour la recherche
 
   // Charger les livres depuis l'API au chargement de la page
@@ -15,26 +14,6 @@ function Library() {
     };
     fetchBooks();
   }, []);
-
-  // Ajouter un livre via l'API
-  const handleAddBook = async () => {
-    if (!newBook) return;
-  
-    const newBookData = {
-      title: newBook,
-      author: "Auteur inconnu",
-      yearRead: new Date().getFullYear(), // Année de lecture par défaut
-      genre1: "Inconnu",                 // Genre par défaut
-      rating: 0,                         // Note par défaut
-    };
-  
-    const addedBook = await addBook(newBookData);
-    if (addedBook) {
-      setBooks([...books, addedBook]);
-      setNewBook("");
-    }
-  };
-  
 
   // Supprimer un livre via l'API
   const handleDeleteBook = (bookId) => {
@@ -67,7 +46,6 @@ function Library() {
             book.title.toLowerCase().includes(searchQuery.toLowerCase())
           )
           .map((book) => (
-            //<BookCard key={book.id} book={book} onDelete={handleDeleteBook} />
             <BookCard key={book.id} book={book} onDelete={handleDeleteBook} onUpdate={handleUpdateBook} />
           ))}
       </div>

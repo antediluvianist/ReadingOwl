@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { deleteBook, updateBook } from "../services/api";
+import { useNavigate } from "react-router-dom";
 
-function BookCard({ book, onDelete, onUpdate }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedBook, setEditedBook] = useState({ title: book.title, author: book.author });
 
-  const handleDelete = async () => {
+function BookCard({ book, onDelete }) {
+  const navigate = useNavigate();
+
+  const handleDelete = async (e) => {
+    e.stopPropagation(); // Empêche le clic de rediriger lors de la suppression
     const confirmDelete = window.confirm(`Supprimer "${book.title}" ?`);
     if (confirmDelete) {
       const success = await deleteBook(book.id);
@@ -15,53 +17,20 @@ function BookCard({ book, onDelete, onUpdate }) {
     }
   };
 
-  const handleUpdate = async () => {
-    const updatedBook = await updateBook(book.id, {
-      ...book,               // Inclut toutes les propriétés actuelles du livre
-      title: editedBook.title,
-      author: editedBook.author,
-      yearRead: book.yearRead || 2024,  // Définit une valeur par défaut si absente
-    });
-  
-    if (updatedBook) {
-      onUpdate(book.id, updatedBook);
-      setIsEditing(false);
-    }
+  const handleCardClick = () => {
+    navigate(`/book/${book.id}`);
   };
 
   return (
-    <div style={styles.card}>
+    <div style={styles.card} onClick={handleCardClick}>
       <img src={book.cover || "https://via.placeholder.com/150"} alt={book.title} style={styles.cover} />
       <div style={styles.info}>
-        {isEditing ? (
-          <>
-            <input
-              type="text"
-              value={editedBook.title}
-              onChange={(e) => setEditedBook({ ...editedBook, title: e.target.value })}
-              style={styles.input}
-            />
-            <input
-              type="text"
-              value={editedBook.author}
-              onChange={(e) => setEditedBook({ ...editedBook, author: e.target.value })}
-              style={styles.input}
-            />
-            <button onClick={handleUpdate} style={styles.saveButton}>💾 Enregistrer</button>
-          </>
-        ) : (
-          <>
-            <h3>{book.title}</h3>
-            <p><strong>{book.author}</strong></p>
-            <p>{book.genre1}{book.subGenre && ` - ${book.subGenre}`}</p>
-            <p>Lu le {book.yearRead}</p>
-          </>
-        )}
+        <h3>{book.title}</h3>
+        <p><strong>{book.author}</strong></p>
+        <p>{book.genre1}{book.subGenre && ` - ${book.subGenre}`}</p>
+        <p>Lu le {book.yearRead}</p>
       </div>
       <div style={styles.actions}>
-        <button onClick={() => setIsEditing(!isEditing)} style={styles.editButton}>
-          {isEditing ? "✏️ Annuler" : "✏️ Modifier"}
-        </button>
         <button onClick={handleDelete} style={styles.deleteButton}>🗑️</button>
         <div style={styles.rating}>{book.rating}</div>
       </div>
@@ -78,6 +47,8 @@ const styles = {
     width: "200px",
     textAlign: "center",
     position: "relative",
+    cursor: "pointer", // Rend la carte cliquable
+    transition: "transform 0.2s",
   },
   cover: {
     width: "100%",
@@ -101,30 +72,6 @@ const styles = {
     borderRadius: "5px",
     padding: "5px",
     cursor: "pointer",
-  },
-  editButton: {
-    backgroundColor: "orange",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    padding: "5px",
-    cursor: "pointer",
-  },
-  saveButton: {
-    backgroundColor: "#4caf50",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    padding: "5px",
-    cursor: "pointer",
-    marginTop: "5px",
-  },
-  input: {
-    width: "90%",
-    padding: "5px",
-    marginBottom: "5px",
-    borderRadius: "3px",
-    border: "1px solid #ccc",
   },
   rating: {
     backgroundColor: "#4caf50",
