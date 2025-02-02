@@ -71,6 +71,9 @@ class Book
     #[ORM\Column(nullable: true)]
     private ?float $rating = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $cover = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -230,5 +233,20 @@ class Book
         $this->rating = $rating;
 
         return $this;
+    }
+
+    public function getCover(): ?string
+    {
+
+    return $this->cover;
+
+    }
+
+public function setCover(?string $cover): static
+    {
+
+    $this->cover = $cover;
+    return $this;
+    
     }
 }

@@ -1,6 +1,18 @@
 import { useState } from "react";
-import { deleteBook, updateBook } from "../services/api";
+import { deleteBook } from "../services/api";
 import { useNavigate } from "react-router-dom";
+
+// Import des images par défaut
+import actionCover from "../assets/category_cover/category_action.webp";
+import aventureCover from "../assets/category_cover/category_aventure.webp";
+import fantasticCover from "../assets/category_cover/category_fantastique.webp";
+import fantasyCover from "../assets/category_cover/category_fantasy.webp";
+import historicalCover from "../assets/category_cover/category_historique.webp";
+import horrorCover from "../assets/category_cover/category_horror.webp";
+import sfCover from "../assets/category_cover/category_sf.webp";
+
+import defaultCover from "../assets/category_cover/category_default.webp";
+
 
 
 function BookCard({ book, onDelete }) {
@@ -21,9 +33,35 @@ function BookCard({ book, onDelete }) {
     navigate(`/book/${book.id}`);
   };
 
+  // Fonction pour déterminer l'image de couverture par défaut selon le genre
+  const getDefaultCover = (genre) => {
+    switch (genre.toLowerCase()) {
+      case "action":
+        return actionCover;
+      case "aventure":
+        return aventureCover;
+      case "fantastique":
+        return fantasticCover;
+      case "fantasy":
+        return fantasyCover;
+      case "historique":
+        return historicalCover;
+      case "horror":
+        return horrorCover;
+      case "sf":
+        return sfCover;
+      default:
+        return defaultCover; // Image de secours si aucun genre ne correspond
+    }
+  };
+
   return (
     <div style={styles.card} onClick={handleCardClick}>
-      <img src={book.cover || "https://via.placeholder.com/150"} alt={book.title} style={styles.cover} />
+      <img 
+        src={book.cover && book.cover !== "" ? book.cover : getDefaultCover(book.genre1)} 
+        alt={book.title} 
+        style={styles.cover}
+      />
       <div style={styles.info}>
         <h3>{book.title}</h3>
         <p><strong>{book.author}</strong></p>

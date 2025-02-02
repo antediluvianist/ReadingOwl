@@ -41,7 +41,7 @@ Accomplissez aussi des objectifs et des défis de lecture pour gagner des points
 ✅ Connexion avec Open Library API pour pré-remplir certains des champs et en ajouter d'autres<br>
 <br>
 🔄 Création des composants React<br>
-🔄 Design frontend
+🔄 Design frontend<br>
 🔄 Interface responsive pour utilisation mobile<br>
 <br>
 ⏳ Système de missions/défis de lecture<br>

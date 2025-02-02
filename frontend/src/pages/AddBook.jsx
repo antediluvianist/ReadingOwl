@@ -16,6 +16,7 @@ function AddBook() {
     comment2: "",
     author: "",
     rating: "",
+    cover: ""
   });
 
   const [suggestions, setSuggestions] = useState([]);
@@ -33,11 +34,16 @@ function AddBook() {
   }, [formData.title]);
 
   const handleSelectBook = (book) => {
+    const coverUrl = book.cover_i
+      ? `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`
+      : "";
+
     setFormData({
       ...formData,
       title: book.title,
       author: book.author_name ? book.author_name.join(", ") : "Auteur inconnu",
       yearRead: book.first_publish_year || "",
+      cover: coverUrl // Ajout de l'URL de la couverture ici
     });
     setSuggestions([]);
   };
@@ -54,6 +60,7 @@ function AddBook() {
       ...formData,
       yearRead: parseInt(formData.yearRead, 10),
       rating: formData.rating ? parseFloat(formData.rating) : null,
+      cover: formData.cover || null
     });
 
     if (newBook) {
@@ -91,6 +98,10 @@ function AddBook() {
         <textarea name="comment2" placeholder="Commentaire 2" onChange={handleChange} style={styles.textarea}></textarea>
         <input type="text" name="author" placeholder="Auteur *" required onChange={handleChange} value={formData.author} style={styles.input} />
         <input type="number" name="rating" placeholder="Note" step="0.1" onChange={handleChange} style={styles.input} />
+
+        {formData.cover && (
+          <img src={formData.cover} alt="Jaquette du livre" style={{ width: "150px", marginTop: "10px" }} />
+        )}
 
         <button type="submit" style={styles.button}>Ajouter</button>
       </form>
