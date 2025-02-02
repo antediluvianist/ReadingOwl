@@ -37,17 +37,18 @@ function AddBook() {
     const coverUrl = book.cover_i
       ? `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`
       : "";
-
-    setFormData({
-      ...formData,
+  
+    setFormData((prevData) => ({
+      ...prevData,
       title: book.title,
       author: book.author_name ? book.author_name.join(", ") : "Auteur inconnu",
-      yearRead: book.first_publish_year || "",
-      cover: coverUrl // Ajout de l'URL de la couverture ici
-    });
+      cover: coverUrl,  // Ajout de l'URL de la couverture ici
+      yearRead: prevData.yearRead, // Conserver la date de lecture saisie par l'utilisateur
+    }));
+    
     setSuggestions([]);
   };
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
