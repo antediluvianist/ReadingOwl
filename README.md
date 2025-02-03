@@ -28,7 +28,8 @@ Accomplissez aussi des objectifs et des défis de lecture pour gagner des points
 
 ## MockUp
 
-![MockUp01](https://github.com/user-attachments/assets/b6158073-e306-4658-87e6-87a4aaddb938)
+![mockup on devices with title02](https://github.com/user-attachments/assets/074f134b-9c5a-489e-8af9-7023a9ae6f81)
+
 
 ## Features à venir & avancée du projet 💡
 
