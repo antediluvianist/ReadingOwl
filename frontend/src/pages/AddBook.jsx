@@ -19,6 +19,8 @@ function AddBook() {
     cover: ""
   });
 
+  const genres = ["Action", "Aventure", "SF", "Horreur", "Fantastique", "Fantasy", "Romance", "Historique"];
+
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
@@ -37,18 +39,18 @@ function AddBook() {
     const coverUrl = book.cover_i
       ? `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`
       : "";
-  
+
     setFormData((prevData) => ({
       ...prevData,
       title: book.title,
       author: book.author_name ? book.author_name.join(", ") : "Auteur inconnu",
-      cover: coverUrl,  // Ajout de l'URL de la couverture ici
-      yearRead: prevData.yearRead, // Conserver la date de lecture saisie par l'utilisateur
+      cover: coverUrl,
+      yearRead: prevData.yearRead,
     }));
-    
+
     setSuggestions([]);
   };
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -89,8 +91,21 @@ function AddBook() {
         )}
 
         <input type="text" name="series" placeholder="Série" onChange={handleChange} style={styles.input} />
-        <input type="text" name="genre1" placeholder="Genre 1 *" required onChange={handleChange} style={styles.input} />
-        <input type="text" name="genre2" placeholder="Genre 2" onChange={handleChange} style={styles.input} />
+
+        <select name="genre1" required onChange={handleChange} style={styles.input}>
+          <option value="">Sélectionnez un genre *</option>
+          {genres.map((genre) => (
+            <option key={genre} value={genre}>{genre}</option>
+          ))}
+        </select>
+
+        <select name="genre2" onChange={handleChange} style={styles.input}>
+          <option value="">Sélectionnez un second genre</option>
+          {genres.map((genre) => (
+            <option key={genre} value={genre}>{genre}</option>
+          ))}
+        </select>
+
         <input type="text" name="subGenre" placeholder="Sous-genre" onChange={handleChange} style={styles.input} />
         <input type="text" name="tag1" placeholder="Tag 1" onChange={handleChange} style={styles.input} />
         <input type="text" name="tag2" placeholder="Tag 2" onChange={handleChange} style={styles.input} />
