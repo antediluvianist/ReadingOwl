@@ -13,9 +13,8 @@ import sfCover from "../assets/category_cover/category_sf.webp";
 
 import defaultCover from "../assets/category_cover/category_default.webp";
 
-
-
 function BookCard({ book, onDelete }) {
+  console.log("Cover path:", book.cover);//test
   const navigate = useNavigate();
 
   const handleDelete = async (e) => {
@@ -57,11 +56,14 @@ function BookCard({ book, onDelete }) {
 
   return (
     <div style={styles.card} onClick={handleCardClick}>
+      {console.log("Cover path:", book.cover)} 
       <img 
-        src={book.cover && book.cover !== "" ? book.cover : getDefaultCover(book.genre1)} 
-        alt={book.title} 
-        style={styles.cover}
+          src={book.cover && book.cover !== "" ? `http://localhost:8000${book.cover}` : getDefaultCover(book.genre1)} 
+          alt={book.title} 
+          style={styles.cover}
+          onError={(e) => e.target.src = getDefaultCover(book.genre1)} // Si l'image échoue, afficher l'image par défaut
       />
+
       <div style={styles.info}>
         <h3>{book.title}</h3>
         <p><strong>{book.author}</strong></p>

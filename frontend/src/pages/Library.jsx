@@ -1,40 +1,64 @@
 import { useEffect, useState } from "react";
-import { getBooks, addBook, deleteBook, updateBook } from "../services/api";
+import { getBooks, updateBook } from "../services/api";
 import BookCard from "../components/BookCard";
-import { searchBooks } from "../services/api";
 
 function Library() {
   const [books, setBooks] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(""); // État pour la recherche
+  const [searchQuery, setSearchQuery] = useState("");
 
-// TEST de recherche lors du chargement de la page avec Open Library API
-/* useEffect(() => {
-  const fetchData = async () => {
-    const books = await searchBooks("Dune");
-    console.log(books); // Vérifie le résultat dans la console
+  // Fonction pour mettre à jour la couverture d'un livre
+  const updateCover = async (book) => {
+    try {
+      const response = await fetch("http://localhost:8000/api/upload-cover", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ coverUrl: book.coverUrl }),
+      });
+
+      const data = await response.json();
+      if (data.coverPath) {
+        await fetch(`http://localhost:8000/api/books/${book.id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/merge-patch+json",
+          },
+          body: JSON.stringify({ cover: data.coverPath }),
+        });
+
+        console.log(`✅ Couverture mise à jour pour le livre : ${book.title}`);
+
+        // Met à jour l'état local des livres
+        setBooks((prevBooks) =>
+          prevBooks.map((b) => (b.id === book.id ? { ...b, cover: data.coverPath } : b))
+        );
+      }
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour de la couverture :", error);
+    }
   };
-  fetchData();
-}, []); */
 
-  // Charger les livres depuis l'API au chargement de la page
+  // Charger les livres depuis l'API
   useEffect(() => {
     const fetchBooks = async () => {
       const booksData = await getBooks();
       setBooks(booksData);
+
+      // Vérifie les livres sans couverture
+      booksData.forEach((book) => {
+        if (!book.cover && book.coverUrl) {
+          updateCover(book);
+        }
+      });
     };
+
     fetchBooks();
   }, []);
 
   // Supprimer un livre via l'API
   const handleDeleteBook = (bookId) => {
     setBooks(books.filter((book) => book.id !== bookId));
-  };
-
-  // Met à jour le livre
-  const handleUpdateBook = (bookId, updatedBook) => {
-    setBooks((prevBooks) =>
-      prevBooks.map((book) => (book.id === bookId ? updatedBook : book))
-    );
   };
 
   return (
@@ -56,7 +80,7 @@ function Library() {
             book.title.toLowerCase().includes(searchQuery.toLowerCase())
           )
           .map((book) => (
-            <BookCard key={book.id} book={book} onDelete={handleDeleteBook} onUpdate={handleUpdateBook} />
+            <BookCard key={book.id} book={book} onDelete={handleDeleteBook} />
           ))}
       </div>
     </div>

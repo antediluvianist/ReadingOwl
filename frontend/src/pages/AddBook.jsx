@@ -35,7 +35,7 @@ function AddBook() {
     fetchSuggestions();
   }, [formData.title]);
 
-  const handleSelectBook = (book) => {
+  const handleSelectBook = async (book) => {
     const coverUrl = book.cover_i
       ? `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`
       : "";
@@ -44,11 +44,32 @@ function AddBook() {
       ...prevData,
       title: book.title,
       author: book.author_name ? book.author_name.join(", ") : "Auteur inconnu",
-      cover: coverUrl,
       yearRead: prevData.yearRead,
     }));
 
     setSuggestions([]);
+
+    if (coverUrl) {
+      try {
+        const response = await fetch("http://localhost:8000/api/upload-cover", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ coverUrl }),
+        });
+
+        const data = await response.json();
+        if (data.coverPath) {
+          setFormData((prevData) => ({
+            ...prevData,
+            cover: data.coverPath,
+          }));
+        }
+      } catch (error) {
+        console.error("Erreur lors de l'upload de la couverture :", error);
+      }
+    }
   };
 
   const handleChange = (e) => {
@@ -63,12 +84,39 @@ function AddBook() {
       ...formData,
       yearRead: parseInt(formData.yearRead, 10),
       rating: formData.rating ? parseFloat(formData.rating) : null,
-      cover: formData.cover || null
+      cover: formData.cover || null,
     });
 
     if (newBook) {
       alert("Livre ajouté avec succès !");
       window.location.href = "/library";
+
+      let attempts = 0;
+      const maxAttempts = 5;
+
+      const checkCoverInterval = setInterval(async () => {
+        attempts++;
+
+        if (formData.cover) {
+          try {
+            await fetch(`http://localhost:8000/api/books/${newBook.id}`, {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/merge-patch+json",
+              },
+              body: JSON.stringify({ cover: formData.cover }),
+            });
+            clearInterval(checkCoverInterval);
+          } catch (error) {
+            console.error("Erreur lors de la mise à jour de la couverture :", error);
+          }
+        }
+
+        if (attempts >= maxAttempts) {
+          clearInterval(checkCoverInterval);
+          console.warn("Téléchargement de la couverture trop long, abandon de la mise à jour.");
+        }
+      }, 2000);
     }
   };
 
@@ -116,7 +164,7 @@ function AddBook() {
         <input type="number" name="rating" placeholder="Note" step="0.1" onChange={handleChange} style={styles.input} />
 
         {formData.cover && (
-          <img src={formData.cover} alt="Jaquette du livre" style={{ width: "150px", marginTop: "10px" }} />
+          <img src={`http://localhost:8000${formData.cover}`} alt="Jaquette du livre" style={{ width: "150px", marginTop: "10px" }} />
         )}
 
         <button type="submit" style={styles.button}>Ajouter</button>
