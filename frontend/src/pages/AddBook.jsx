@@ -23,11 +23,20 @@ function AddBook() {
   const [genres, setGenres] = useState(defaultGenres);
   const [suggestions, setSuggestions] = useState([]);
 
+  // 🔗 Récupération des catégories personnalisées depuis l'API
   useEffect(() => {
-    const fetchCustomCategories = () => {
-      const customCategories = JSON.parse(localStorage.getItem("customCategories")) || [];
-      setGenres([...defaultGenres, ...customCategories]);
+    const fetchCustomCategories = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/custom-categories");
+        const customCategories = await response.json();
+        const customCategoryNames = customCategories.map(cat => cat.name);
+
+        setGenres([...defaultGenres, ...customCategoryNames]); // Fusion des genres par défaut et personnalisés
+      } catch (error) {
+        console.error("Erreur lors du chargement des catégories personnalisées :", error);
+      }
     };
+
     fetchCustomCategories();
   }, []);
 
@@ -61,9 +70,7 @@ function AddBook() {
       try {
         const response = await fetch("http://localhost:8000/api/upload-cover", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ coverUrl }),
         });
 
@@ -123,15 +130,15 @@ function AddBook() {
 
         <select name="genre1" required onChange={handleChange} style={styles.input}>
           <option value="">Sélectionnez un genre *</option>
-          {genres.map((genre) => (
-            <option key={genre} value={genre}>{genre}</option>
+          {genres.map((genre, index) => (
+            <option key={index} value={genre}>{genre}</option>
           ))}
         </select>
 
         <select name="genre2" onChange={handleChange} style={styles.input}>
           <option value="">Sélectionnez un second genre</option>
-          {genres.map((genre) => (
-            <option key={genre} value={genre}>{genre}</option>
+          {genres.map((genre, index) => (
+            <option key={index} value={genre}>{genre}</option>
           ))}
         </select>
 
