@@ -1,11 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const defaultCategories = ["Toutes", "Action", "Aventure", "SF", "Horreur", "Fantastique", "Fantasy", "Romance", "Historique"];
 
 function SideMenu({ onCategorySelect }) {
-  const [categories, setCategories] = useState(defaultCategories);
+  const [categories, setCategories] = useState(() => {
+    const savedCategories = localStorage.getItem("customCategories");
+    return savedCategories ? [...defaultCategories, ...JSON.parse(savedCategories)] : defaultCategories;
+  });
+
   const [selectedCategory, setSelectedCategory] = useState("Toutes");
   const [newCategory, setNewCategory] = useState("");
+
+  useEffect(() => {
+    const customCategories = categories.filter(cat => !defaultCategories.includes(cat));
+    localStorage.setItem("customCategories", JSON.stringify(customCategories));
+  }, [categories]);
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
@@ -19,6 +28,14 @@ function SideMenu({ onCategorySelect }) {
     }
   };
 
+  const handleDeleteCategory = (category) => {
+    setCategories(categories.filter(cat => cat !== category));
+    if (selectedCategory === category) {
+      setSelectedCategory("Toutes");
+      onCategorySelect("Toutes");
+    }
+  };
+
   return (
     <div style={styles.sideMenu}>
       <h2>Genres</h2>
@@ -29,10 +46,24 @@ function SideMenu({ onCategorySelect }) {
             style={{
               ...styles.categoryItem,
               backgroundColor: selectedCategory === category ? "#4caf50" : "#1e1e1e",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
             onClick={() => handleCategoryClick(category)}
           >
-            {category}
+            <span>{category}</span>
+            {!defaultCategories.includes(category) && selectedCategory === category && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteCategory(category);
+                }}
+                style={styles.deleteButton}
+              >
+                ✖
+              </button>
+            )}
           </div>
         ))}
       </div>
@@ -69,6 +100,7 @@ const styles = {
     borderRadius: "5px",
     cursor: "pointer",
     transition: "background-color 0.3s",
+    position: "relative",
   },
   addCategoryContainer: {
     display: "flex",
@@ -89,6 +121,15 @@ const styles = {
     border: "none",
     borderRadius: "0 5px 5px 0",
     cursor: "pointer",
+  },
+  deleteButton: {
+    backgroundColor: "red",
+    border: "none",
+    color: "white",
+    padding: "2px 5px",
+    borderRadius: "3px",
+    cursor: "pointer",
+    marginLeft: "5px",
   },
 };
 

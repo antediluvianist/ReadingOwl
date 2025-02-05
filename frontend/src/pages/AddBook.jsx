@@ -19,9 +19,17 @@ function AddBook() {
     cover: ""
   });
 
-  const genres = ["Action", "Aventure", "SF", "Horreur", "Fantastique", "Fantasy", "Romance", "Historique"];
-
+  const defaultGenres = ["Action", "Aventure", "SF", "Horreur", "Fantastique", "Fantasy", "Romance", "Historique"];
+  const [genres, setGenres] = useState(defaultGenres);
   const [suggestions, setSuggestions] = useState([]);
+
+  useEffect(() => {
+    const fetchCustomCategories = () => {
+      const customCategories = JSON.parse(localStorage.getItem("customCategories")) || [];
+      setGenres([...defaultGenres, ...customCategories]);
+    };
+    fetchCustomCategories();
+  }, []);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -90,33 +98,6 @@ function AddBook() {
     if (newBook) {
       alert("Livre ajouté avec succès !");
       window.location.href = "/library";
-
-      let attempts = 0;
-      const maxAttempts = 5;
-
-      const checkCoverInterval = setInterval(async () => {
-        attempts++;
-
-        if (formData.cover) {
-          try {
-            await fetch(`http://localhost:8000/api/books/${newBook.id}`, {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/merge-patch+json",
-              },
-              body: JSON.stringify({ cover: formData.cover }),
-            });
-            clearInterval(checkCoverInterval);
-          } catch (error) {
-            console.error("Erreur lors de la mise à jour de la couverture :", error);
-          }
-        }
-
-        if (attempts >= maxAttempts) {
-          clearInterval(checkCoverInterval);
-          console.warn("Téléchargement de la couverture trop long, abandon de la mise à jour.");
-        }
-      }, 2000);
     }
   };
 
