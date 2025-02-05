@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { getBooks, updateBook } from "../services/api";
 import BookCard from "../components/BookCard";
+import SideMenu from "../components/SideMenu";
 
 function Library() {
   const [books, setBooks] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Toutes");
 
-  // Fonction pour mettre à jour la couverture d'un livre
   const updateCover = async (book) => {
     try {
       const response = await fetch("http://localhost:8000/api/upload-cover", {
@@ -27,9 +28,8 @@ function Library() {
           body: JSON.stringify({ cover: data.coverPath }),
         });
 
-        console.log(`✅ Couverture mise à jour pour le livre : ${book.title}`);
+        console.log(`Couverture mise à jour pour le livre : ${book.title}`);
 
-        // Met à jour l'état local des livres
         setBooks((prevBooks) =>
           prevBooks.map((b) => (b.id === book.id ? { ...b, cover: data.coverPath } : b))
         );
@@ -39,13 +39,11 @@ function Library() {
     }
   };
 
-  // Charger les livres depuis l'API
   useEffect(() => {
     const fetchBooks = async () => {
       const booksData = await getBooks();
       setBooks(booksData);
 
-      // Vérifie les livres sans couverture
       booksData.forEach((book) => {
         if (!book.cover && book.coverUrl) {
           updateCover(book);
@@ -56,43 +54,53 @@ function Library() {
     fetchBooks();
   }, []);
 
-  // Supprimer un livre via l'API
   const handleDeleteBook = (bookId) => {
     setBooks(books.filter((book) => book.id !== bookId));
   };
 
+  const filteredBooks = selectedCategory === "Toutes"
+    ? books
+    : books.filter((book) => book.genre1 === selectedCategory || book.genre2 === selectedCategory);
+
   return (
-    <div style={styles.library}>
-      <h1>Ma Bibliothèque</h1>
-      <div style={styles.inputContainer}>
-        <input
-          type="text"
-          placeholder="Rechercher un livre..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={styles.input}
-        />
-        <button onClick={() => window.location.href = "/add-book"} style={styles.button}>Ajouter un Livre</button>
-      </div>
-      <div style={styles.grid}>
-        {books
-          .filter((book) =>
-            book.title.toLowerCase().includes(searchQuery.toLowerCase())
-          )
-          .map((book) => (
-            <BookCard key={book.id} book={book} onDelete={handleDeleteBook} />
-          ))}
+    <div style={styles.libraryContainer}>
+      <SideMenu onCategorySelect={setSelectedCategory} />
+      <div style={styles.libraryContent}>
+        <h1>Ma Bibliothèque</h1>
+        <div style={styles.inputContainer}>
+          <input
+            type="text"
+            placeholder="Rechercher un livre..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={styles.input}
+          />
+          <button onClick={() => window.location.href = "/add-book"} style={styles.button}>Ajouter un Livre</button>
+        </div>
+        <div style={styles.grid}>
+          {filteredBooks
+            .filter((book) =>
+              book.title.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+            .map((book) => (
+              <BookCard key={book.id} book={book} onDelete={handleDeleteBook} />
+            ))}
+        </div>
       </div>
     </div>
   );
 }
 
 const styles = {
-  library: {
-    padding: "20px",
+  libraryContainer: {
+    display: "flex",
     backgroundColor: "#121212",
     minHeight: "100vh",
     color: "white",
+  },
+  libraryContent: {
+    flex: 1,
+    padding: "20px",
   },
   inputContainer: {
     display: "flex",
