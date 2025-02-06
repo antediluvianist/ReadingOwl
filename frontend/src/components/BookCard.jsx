@@ -80,10 +80,10 @@ function BookCard({ book, onDelete }) {
 
 const styles = {
   card: {
-    backgroundColor: "rgb(18, 18, 18)",
+    backgroundColor: "#1b1b1b",
     borderRadius: "10px",
     padding: "0px",
-    color: "rgb(150, 150, 150)",
+    color: "#8a8a8a",
     width: "250px",
     textAlign: "center",
     position: "relative",
@@ -105,9 +105,11 @@ const styles = {
   },
   bookCategory: {
     margin: "0px",
+    color: "#6d6d6d",
   },
   yearRead: {
     margin: "10px 0px 0px 0px",
+    color: "#6d6d6d",
   },
   info: {
     marginTop: "10px",
@@ -128,10 +130,10 @@ const styles = {
     marginLeft: "10px",
   },
   rating: {
-    backgroundColor: "rgb(36, 36, 36)",
+    backgroundColor: "#2a2a2a",
     padding: "5px 10px 5px 10px",
     borderRadius: "5px",
-    color: "rgb(76, 175, 80)",
+    color: "#a0dfb0",
     fontWeight: "bold",
     marginRight: "10px",
   },

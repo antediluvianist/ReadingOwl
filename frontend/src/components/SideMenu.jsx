@@ -81,7 +81,7 @@ function SideMenu({ onCategorySelect }) {
             key={category.id}
             style={{
               ...styles.categoryItem,
-              backgroundColor: selectedCategory === category.name ? "#4caf50" : "rgb(10, 10, 10)",
+              backgroundColor: selectedCategory === category.name ? "#55e77c" : "#111111",
             }}
             onClick={() => handleCategoryClick(category)}
           >
@@ -112,7 +112,7 @@ function SideMenu({ onCategorySelect }) {
 const styles = {
   sideMenu: {
     width: "200px",
-    backgroundColor: "rgb(10, 10, 10)",
+    backgroundColor: "#111111",
     color: "white",
     padding: "10px",
     overflowY: "auto",
@@ -153,7 +153,7 @@ const styles = {
   },
   addButton: {
     padding: "5px 10px",
-    backgroundColor: "#4caf50",
+    backgroundColor: "#55e77c",
     color: "white",
     border: "none",
     borderRadius: "0 5px 5px 0",

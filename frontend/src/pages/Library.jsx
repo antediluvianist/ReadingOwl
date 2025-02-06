@@ -135,7 +135,7 @@ function Library() {
 const styles = {
   libraryContainer: {
     display: "flex",
-    backgroundColor: "rgb(10, 10, 10)",
+    backgroundColor: "#111111",
     minHeight: "100vh",
     color: "white",
   },
@@ -153,8 +153,8 @@ const styles = {
     padding: "10px",
     borderRadius: "5px",
     border: "0px solid #ccc",
-    backgroundColor: "rgb(49, 49, 49)",
-    color: "rgb(119, 119, 119)",
+    backgroundColor: "#292929",
+    color: "#676767",
     outline: "none",
   },
   input: {
@@ -162,13 +162,13 @@ const styles = {
     padding: "12px",
     borderRadius: "25px",
     border: "0px solid #ccc",
-    backgroundColor: "#1e1e1e",
-    color: "#979797",
+    backgroundColor: "#1b1b1b",
+    color: "#484848",
     outline: "none",
   },
   button: {
     padding: "12px 20px",
-    backgroundColor: "rgb(75, 208, 80)",
+    backgroundColor: "#55e77c",
     color: "white",
     border: "none",
     borderRadius: "25px",
