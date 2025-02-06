@@ -16,7 +16,7 @@ function Navbar() {
         <li><Link to="/missions" style={styles.link}>Missions</Link></li>
         <li><Link to="/achievements" style={styles.link}>Succès</Link></li>
       </ul>
-      <Link to="/profil">
+      <Link to="/profile">
         <img src={profileIcon} alt="Profil" style={styles.profileIcon} />
       </Link>
     </nav>
@@ -27,7 +27,7 @@ const styles = {
   navbar: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 20px", background: "#121212" },
   logo: { height: "40px" },
   navLinks: { display: "flex", listStyle: "none", gap: "20px" },
-  link: { color: "white", textDecoration: "none", fontSize: "16px" },
+  link: { color: "white", textDecoration: "none", fontSize: "16px"},
   profileIcon: { height: "40px", borderRadius: "50%" }
 };
 
