@@ -65,10 +65,10 @@ function BookCard({ book, onDelete }) {
       />
 
       <div style={styles.info}>
-        <h3>{book.title}</h3>
-        <p><strong>{book.author}</strong></p>
-        <p>{book.genre1}{book.subGenre && ` - ${book.subGenre}`}</p>
-        <p>Lu le {book.yearRead}</p>
+        <h3 style={styles.title}>{book.title}</h3>
+        <p style={styles.authorName}><strong>{book.author}</strong></p>
+        <p style={styles.bookCategory}>{book.genre1}{book.subGenre && ` - ${book.subGenre}`}</p>
+        <p style={styles.yearRead}>Lu en {book.yearRead}</p>
       </div>
       <div style={styles.actions}>
         <button onClick={handleDelete} style={styles.deleteButton}>🗑️</button>
@@ -89,12 +89,25 @@ const styles = {
     position: "relative",
     cursor: "pointer", // Rend la carte cliquable
     transition: "transform 0.2s",
+    height: "320px",
   },
   cover: {
     width: "100%",
-    height: "250px",
+    height: "190px",
     objectFit: "cover",
-    borderRadius: "5px",
+    borderRadius: "10px 10px 0px 0px",
+  },
+  title: {
+    margin: "0px",
+  },
+  authorName: {
+    margin: "0px",
+  },
+  bookCategory: {
+    margin: "0px",
+  },
+  yearRead: {
+    margin: "10px 0px 0px 0px",
   },
   info: {
     marginTop: "10px",
@@ -103,24 +116,24 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: "10px",
+    marginTop: "-85px",
   },
   deleteButton: {
-    backgroundColor: "red",
+    backgroundColor: "#4f1818",
     color: "white",
     border: "none",
     borderRadius: "5px",
-    padding: "5px",
+    padding: "5px 10px 5px 10px",
     cursor: "pointer",
-    marginLeft: "25px",
+    marginLeft: "10px",
   },
   rating: {
-    backgroundColor: "#4caf50",
-    padding: "5px",
+    backgroundColor: "rgb(36, 36, 36)",
+    padding: "5px 10px 5px 10px",
     borderRadius: "5px",
-    color: "white",
+    color: "rgb(76, 175, 80)",
     fontWeight: "bold",
-    marginRight: "25px",
+    marginRight: "10px",
   },
 };
 
