@@ -117,6 +117,10 @@ function Library() {
         </div>
         <div style={styles.grid}>
           {filteredBooks
+            .filter((book) =>
+              book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              book.author.toLowerCase().includes(searchQuery.toLowerCase())
+            )
             .map((book) => (
               <BookCard key={book.id} book={book} onDelete={handleDeleteBook} />
             ))}
