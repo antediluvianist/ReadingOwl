@@ -41,6 +41,8 @@ function Library() {
   };
 
   useEffect(() => {
+    document.body.style.margin = "0"; // Solution temporaire pour supprimer les marges
+    document.documentElement.style.margin = "0"; // Solution temporaire pour supprimer les marges
     const fetchBooks = async () => {
       const booksData = await getBooks();
       setBooks(booksData);
@@ -133,7 +135,7 @@ function Library() {
 const styles = {
   libraryContainer: {
     display: "flex",
-    backgroundColor: "#121212",
+    backgroundColor: "rgb(10, 10, 10)",
     minHeight: "100vh",
     color: "white",
   },
@@ -150,26 +152,26 @@ const styles = {
   select: {
     padding: "10px",
     borderRadius: "5px",
-    border: "1px solid #ccc",
-    backgroundColor: "#1e1e1e",
-    color: "white",
+    border: "0px solid #ccc",
+    backgroundColor: "rgb(49, 49, 49)",
+    color: "rgb(119, 119, 119)",
     outline: "none",
   },
   input: {
     flex: 1,
     padding: "12px",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
+    borderRadius: "25px",
+    border: "0px solid #ccc",
     backgroundColor: "#1e1e1e",
-    color: "white",
+    color: "#979797",
     outline: "none",
   },
   button: {
     padding: "12px 20px",
-    backgroundColor: "#4caf50",
+    backgroundColor: "rgb(75, 208, 80)",
     color: "white",
     border: "none",
-    borderRadius: "5px",
+    borderRadius: "25px",
     cursor: "pointer",
     transition: "background-color 0.3s",
   },

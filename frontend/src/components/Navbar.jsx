@@ -24,11 +24,34 @@ function Navbar() {
 }
 
 const styles = {
-  navbar: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 20px", background: "#121212" },
-  logo: { height: "40px" },
-  navLinks: { display: "flex", listStyle: "none", gap: "20px" },
-  link: { color: "white", textDecoration: "none", fontSize: "16px"},
-  profileIcon: { height: "40px", borderRadius: "50%" }
+  navbar: {
+     display: "flex",
+     justifyContent: "space-between",
+     alignItems: "center",
+     padding: "10px 20px",
+     background: "rgb(10, 10, 10)"
+  },
+
+  logo: {
+    height: "40px"
+  },
+
+  navLinks: {
+    display: "flex",
+    listStyle: "none",
+    gap: "20px"
+  },
+
+  link: {
+    color: "white",
+     textDecoration: "none",
+      fontSize: "16px"
+    },
+
+  profileIcon: {
+     height: "40px",
+      borderRadius: "50%" 
+    }
 };
 
 export default Navbar;

@@ -80,11 +80,11 @@ function BookCard({ book, onDelete }) {
 
 const styles = {
   card: {
-    backgroundColor: "#1e1e1e",
+    backgroundColor: "rgb(18, 18, 18)",
     borderRadius: "10px",
-    padding: "10px",
-    color: "white",
-    width: "200px",
+    padding: "0px",
+    color: "rgb(150, 150, 150)",
+    width: "250px",
     textAlign: "center",
     position: "relative",
     cursor: "pointer", // Rend la carte cliquable
@@ -112,6 +112,7 @@ const styles = {
     borderRadius: "5px",
     padding: "5px",
     cursor: "pointer",
+    marginLeft: "25px",
   },
   rating: {
     backgroundColor: "#4caf50",
@@ -119,6 +120,7 @@ const styles = {
     borderRadius: "5px",
     color: "white",
     fontWeight: "bold",
+    marginRight: "25px",
   },
 };
 
