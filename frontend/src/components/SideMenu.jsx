@@ -12,6 +12,19 @@ const defaultCategories = [
   { id: "default-9", name: "Historique" },
 ];
 
+const categoryImages = {
+  "Toutes" : "/src/assets/category_cover/category_all.webp",
+  "Action": "/src/assets/category_cover/category_action.webp",
+  "Aventure": "/src/assets/category_cover/category_aventure.webp",
+  "SF": "/src/assets/category_cover/category_sf.webp",
+  "Horreur": "/src/assets/category_cover/category_horror.webp",
+  "Fantastique": "/src/assets/category_cover/category_fantastique.webp",
+  "Fantasy": "/src/assets/category_cover/category_fantasy.webp",
+  "Historique": "/src/assets/category_cover/category_historique.webp",
+  "Romance": "/src/assets/category_cover/category_romance.webp",
+  "Generic": "/src/assets/category_cover/category_generic.webp",
+};
+
 function SideMenu({ onCategorySelect }) {
   const [categories, setCategories] = useState(defaultCategories);
   const [selectedCategory, setSelectedCategory] = useState("Toutes");
@@ -27,7 +40,6 @@ function SideMenu({ onCategorySelect }) {
         console.error("Erreur lors du chargement des catégories personnalisées :", error);
       }
     };
-
     fetchCustomCategories();
   }, []);
 
@@ -44,11 +56,9 @@ function SideMenu({ onCategorySelect }) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name: newCategory.trim() }),
         });
-
         if (response.ok) {
           const updatedResponse = await fetch("http://localhost:8000/api/custom-categories");
           const updatedData = await updatedResponse.json();
-
           setCategories([...defaultCategories, ...updatedData]);
           setNewCategory("");
         }
@@ -60,7 +70,6 @@ function SideMenu({ onCategorySelect }) {
 
   const handleDeleteCategory = async (category) => {
     if (category.id.toString().startsWith("default-")) return;
-
     try {
       await fetch(`http://localhost:8000/api/custom-categories/${category.id}`, {
         method: "DELETE",
@@ -82,15 +91,25 @@ function SideMenu({ onCategorySelect }) {
             style={{
               ...styles.categoryItem,
               backgroundColor: selectedCategory === category.name ? "#55e77c" : "#111111",
+              borderRadius: "15px",
+              paddingLeft: "7px",
             }}
             onClick={() => handleCategoryClick(category)}
           >
-            {category.name}
+            <img 
+              src={categoryImages[category.name] || categoryImages["Generic"]} 
+              alt={category.name} 
+              style={{ width: "50px", height: "50px", borderRadius: "25%", marginRight: "10px" }}
+            />
+            <span>{category.name}</span>
             {selectedCategory === category.name && !category.id.toString().startsWith("default-") && (
-              <button onClick={(e) => {
-                e.stopPropagation(); // Empêche le clic de désélectionner la catégorie
-                handleDeleteCategory(category);
-              }} style={styles.deleteButton}>❌</button>
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteCategory(category);
+                }} 
+                style={styles.deleteButton}
+              >❌</button>
             )}
           </div>
         ))}
@@ -114,7 +133,7 @@ const styles = {
     width: "200px",
     backgroundColor: "#111111",
     color: "white",
-    padding: "10px",
+    padding: "5px 10px 5px 10px",
     overflowY: "auto",
     maxHeight: "100vh",
   },
@@ -126,10 +145,10 @@ const styles = {
   categoryItem: {
     padding: "10px",
     borderRadius: "25px",
+    padding: "5px 10px 5px 10px",
     cursor: "pointer",
     transition: "background-color 0.3s",
     display: "flex",
-    justifyContent: "space-between",
     alignItems: "center",
   },
   deleteButton: {

@@ -30,7 +30,6 @@ Accomplissez aussi des objectifs et des défis de lecture pour gagner des points
 
 ![mockup on devices with title02](https://github.com/user-attachments/assets/074f134b-9c5a-489e-8af9-7023a9ae6f81)
 
-
 ## Features à venir & avancée du projet 💡
 
 ✅ Génération de la structure de base Symfony<br>
@@ -40,9 +39,11 @@ Accomplissez aussi des objectifs et des défis de lecture pour gagner des points
 ✅ Génération de la structure de base React<br>
 ✅ Connexion entre front et back<br>
 ✅ Connexion avec Open Library API pour pré-remplir certains des champs et en ajouter d'autres<br>
+✅ Création des composants React<br>
 <br>
-🔄 Création des composants React<br>
+🔄 Polissage des composants React<br>
 🔄 Design frontend<br>
+🔄 Animations<br>
 🔄 Interface responsive pour utilisation mobile<br>
 <br>
 ⏳ Système de missions/défis de lecture<br>
