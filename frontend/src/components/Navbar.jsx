@@ -2,56 +2,27 @@ import { Link } from "react-router-dom";
 import logo from "../assets/logo-mini.png";
 import profileIcon from "../assets/profile-icon.png";
 
+import "./styles/Navbar.css";
+
 function Navbar() {
   return (
-    <nav style={styles.navbar}>
+    <nav className="navbar">
       <Link to="/">
-        <img src={logo} alt="Reading Tracker Logo" style={styles.logo} />
+        <img src={logo} alt="Reading Tracker Logo" className="navbar__logo" />
       </Link>
-      <ul style={styles.navLinks}>
-        <li><Link to="/library" style={styles.link}>Bibliothèque</Link></li>
-        <li><Link to="/pal" style={styles.link}>PAL</Link></li>
-        <li><Link to="/recommendations" style={styles.link}>Recommandations</Link></li>
-        <li><Link to="/wishlist" style={styles.link}>Wishlist</Link></li>
-        <li><Link to="/missions" style={styles.link}>Missions</Link></li>
-        <li><Link to="/achievements" style={styles.link}>Succès</Link></li>
+      <ul className="navbar-links">
+        <li><Link to="/library" className="navbar-links__link">Bibliothèque</Link></li>
+        <li><Link to="/pal" className="navbar-links__link">PAL</Link></li>
+        <li><Link to="/recommendations" className="navbar-links__link">Recommandations</Link></li>
+        <li><Link to="/wishlist" className="navbar-links__link">Wishlist</Link></li>
+        <li><Link to="/missions" className="navbar-links__link">Missions</Link></li>
+        <li><Link to="/achievements" className="navbar-links__link">Succès</Link></li>
       </ul>
       <Link to="/profile">
-        <img src={profileIcon} alt="Profil" style={styles.profileIcon} />
+        <img src={profileIcon} alt="Profil" className="navbar__profile-icon" />
       </Link>
     </nav>
   );
 }
-
-const styles = {
-  navbar: {
-     display: "flex",
-     justifyContent: "space-between",
-     alignItems: "center",
-     padding: "10px 20px",
-     background: "#111111"
-  },
-
-  logo: {
-    height: "40px"
-  },
-
-  navLinks: {
-    display: "flex",
-    listStyle: "none",
-    gap: "20px"
-  },
-
-  link: {
-    color: "white",
-     textDecoration: "none",
-      fontSize: "16px"
-    },
-
-  profileIcon: {
-     height: "40px",
-      borderRadius: "50%" 
-    }
-};
 
 export default Navbar;

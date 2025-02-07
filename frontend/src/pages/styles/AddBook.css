@@ -1,0 +1,61 @@
+/* addbook */
+
+.addbook {
+    padding: 20px;
+    background-color: #121212;
+    min-height: 100vh;
+    color: white;
+  }
+
+  /* addbook-form */
+  
+  .addbook-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .addbook-form__form-input, .addbook-form__form-textarea {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #1e1e1e;
+    color: white;
+  }
+  
+  .addbook-form__form-textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+  
+  .addbook-form__submit-button {
+    padding: 12px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .addbook-form__suggestions {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 5px;
+    list-style: none;
+    padding: 5px;
+    margin: 5px 0;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .addbook-form__suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid #333;
+  }
+  
+  .addbook-form__cover {
+    width: 150px;
+    margin-top: 10px;
+  }
+  

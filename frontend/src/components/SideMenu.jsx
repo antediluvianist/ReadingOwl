@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import "./styles/SideMenu.css";
 
 const defaultCategories = [
   { id: "default-1", name: "Toutes" },
@@ -13,7 +14,7 @@ const defaultCategories = [
 ];
 
 const categoryImages = {
-  "Toutes" : "/src/assets/category_cover/category_all.webp",
+  "Toutes": "/src/assets/category_cover/category_all.webp",
   "Action": "/src/assets/category_cover/category_action.webp",
   "Aventure": "/src/assets/category_cover/category_aventure.webp",
   "SF": "/src/assets/category_cover/category_sf.webp",
@@ -82,24 +83,19 @@ function SideMenu({ onCategorySelect }) {
   };
 
   return (
-    <div style={styles.sideMenu}>
+    <div className="sidemenu">
       <h2>Genres</h2>
-      <div style={styles.categoryList}>
+      <div className="sidemenu-list">
         {categories.map((category) => (
           <div
             key={category.id}
-            style={{
-              ...styles.categoryItem,
-              backgroundColor: selectedCategory === category.name ? "#55e77c" : "#111111",
-              borderRadius: "15px",
-              paddingLeft: "7px",
-            }}
+            className={`sidemenu-list__item ${selectedCategory === category.name ? "selected" : ""}`}
             onClick={() => handleCategoryClick(category)}
           >
             <img 
               src={categoryImages[category.name] || categoryImages["Generic"]} 
               alt={category.name} 
-              style={{ width: "50px", height: "50px", borderRadius: "25%", marginRight: "10px" }}
+              className="sidemenu-list__icon"
             />
             <span>{category.name}</span>
             {selectedCategory === category.name && !category.id.toString().startsWith("default-") && (
@@ -108,76 +104,24 @@ function SideMenu({ onCategorySelect }) {
                   e.stopPropagation();
                   handleDeleteCategory(category);
                 }} 
-                style={styles.deleteButton}
+                className="sidemenu-list__delete-btn"
               >❌</button>
             )}
           </div>
         ))}
       </div>
-      <div style={styles.addCategoryContainer}>
+      <div className="sidemenu-add-category">
         <input
           type="text"
           value={newCategory}
           onChange={(e) => setNewCategory(e.target.value)}
           placeholder="Ajouter une catégorie"
-          style={styles.input}
+          className="sidemenu-add-category__input"
         />
-        <button onClick={handleAddCategory} style={styles.addButton}>+</button>
+        <button onClick={handleAddCategory} className="sidemenu-add-category__add-btn">+</button>
       </div>
     </div>
   );
 }
-
-const styles = {
-  sideMenu: {
-    width: "200px",
-    backgroundColor: "#111111",
-    color: "white",
-    padding: "5px 10px 5px 10px",
-    overflowY: "auto",
-    maxHeight: "100vh",
-  },
-  categoryList: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "5px",
-  },
-  categoryItem: {
-    padding: "10px",
-    borderRadius: "25px",
-    padding: "5px 10px 5px 10px",
-    cursor: "pointer",
-    transition: "background-color 0.3s",
-    display: "flex",
-    alignItems: "center",
-  },
-  deleteButton: {
-    background: "none",
-    border: "none",
-    color: "#ff4d4d",
-    cursor: "pointer",
-    marginLeft: "10px",
-  },
-  addCategoryContainer: {
-    display: "flex",
-    marginTop: "10px",
-  },
-  input: {
-    flex: 1,
-    padding: "5px",
-    borderRadius: "5px 0 0 5px",
-    border: "0px solid #ccc",
-    backgroundColor: "#1e1e1e",
-    color: "white",
-  },
-  addButton: {
-    padding: "5px 10px",
-    backgroundColor: "#55e77c",
-    color: "white",
-    border: "none",
-    borderRadius: "0 5px 5px 0",
-    cursor: "pointer",
-  },
-};
 
 export default SideMenu;

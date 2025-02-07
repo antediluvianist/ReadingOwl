@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { addBook, searchBooks } from "../services/api";
+import "./styles/AddBook.css";
 
 function AddBook() {
   const [formData, setFormData] = useState({
@@ -23,20 +24,17 @@ function AddBook() {
   const [genres, setGenres] = useState(defaultGenres);
   const [suggestions, setSuggestions] = useState([]);
 
-  // 🔗 Récupération des catégories personnalisées depuis l'API
   useEffect(() => {
     const fetchCustomCategories = async () => {
       try {
         const response = await fetch("http://localhost:8000/api/custom-categories");
         const customCategories = await response.json();
         const customCategoryNames = customCategories.map(cat => cat.name);
-
-        setGenres([...defaultGenres, ...customCategoryNames]); // Fusion des genres par défaut et personnalisés
+        setGenres([...defaultGenres, ...customCategoryNames]);
       } catch (error) {
         console.error("Erreur lors du chargement des catégories personnalisées :", error);
       }
     };
-
     fetchCustomCategories();
   }, []);
 
@@ -53,19 +51,14 @@ function AddBook() {
   }, [formData.title]);
 
   const handleSelectBook = async (book) => {
-    const coverUrl = book.cover_i
-      ? `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`
-      : "";
-
+    const coverUrl = book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg` : "";
     setFormData((prevData) => ({
       ...prevData,
       title: book.title,
       author: book.author_name ? book.author_name.join(", ") : "Auteur inconnu",
       yearRead: prevData.yearRead,
     }));
-
     setSuggestions([]);
-
     if (coverUrl) {
       try {
         const response = await fetch("http://localhost:8000/api/upload-cover", {
@@ -73,7 +66,6 @@ function AddBook() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ coverUrl }),
         });
-
         const data = await response.json();
         if (data.coverPath) {
           setFormData((prevData) => ({
@@ -94,14 +86,12 @@ function AddBook() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const newBook = await addBook({
       ...formData,
       yearRead: parseInt(formData.yearRead, 10),
       rating: formData.rating ? parseFloat(formData.rating) : null,
       cover: formData.cover || null,
     });
-
     if (newBook) {
       alert("Livre ajouté avec succès !");
       window.location.href = "/library";
@@ -109,16 +99,16 @@ function AddBook() {
   };
 
   return (
-    <div style={styles.container}>
+    <div className="addbook">
       <h1>Ajouter un Livre</h1>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input type="number" name="yearRead" placeholder="Année de lecture *" required onChange={handleChange} style={styles.input} />
-        <input type="text" name="title" placeholder="Titre *" required onChange={handleChange} style={styles.input} />
+      <form onSubmit={handleSubmit} className="addbook-form">
+        <input type="number" name="yearRead" placeholder="Année de lecture *" required onChange={handleChange} className="addbook-form__form-input" />
+        <input type="text" name="title" placeholder="Titre *" required onChange={handleChange} className="addbook-form__form-input" />
 
         {suggestions.length > 0 && (
-          <ul style={styles.suggestions}>
+          <ul className="addbook-form__suggestions">
             {suggestions.map((book) => (
-              <li key={book.key} onClick={() => handleSelectBook(book)} style={styles.suggestionItem}>
+              <li key={book.key} onClick={() => handleSelectBook(book)} className="addbook-form__suggestion-item">
                 <strong>{book.title}</strong> <br />
                 <small>{book.author_name ? book.author_name.join(", ") : "Auteur inconnu"}</small>
               </li>
@@ -126,92 +116,34 @@ function AddBook() {
           </ul>
         )}
 
-        <input type="text" name="series" placeholder="Série" onChange={handleChange} style={styles.input} />
-
-        <select name="genre1" required onChange={handleChange} style={styles.input}>
+        <input type="text" name="series" placeholder="Série" onChange={handleChange} className="addbook-form__form-input" />
+        <select name="genre1" required onChange={handleChange} className="addbook-form__form-input">
           <option value="">Sélectionnez un genre *</option>
           {genres.map((genre, index) => (
             <option key={index} value={genre}>{genre}</option>
           ))}
         </select>
-
-        <select name="genre2" onChange={handleChange} style={styles.input}>
+        <select name="genre2" onChange={handleChange} className="addbook-form__form-input">
           <option value="">Sélectionnez un second genre</option>
           {genres.map((genre, index) => (
             <option key={index} value={genre}>{genre}</option>
           ))}
         </select>
 
-        <input type="text" name="subGenre" placeholder="Sous-genre" onChange={handleChange} style={styles.input} />
-        <input type="text" name="tag1" placeholder="Tag 1" onChange={handleChange} style={styles.input} />
-        <input type="text" name="tag2" placeholder="Tag 2" onChange={handleChange} style={styles.input} />
-        <input type="text" name="tag3" placeholder="Tag 3" onChange={handleChange} style={styles.input} />
-        <textarea name="comment1" placeholder="Commentaire 1" onChange={handleChange} style={styles.textarea}></textarea>
-        <textarea name="comment2" placeholder="Commentaire 2" onChange={handleChange} style={styles.textarea}></textarea>
-        <input type="text" name="author" placeholder="Auteur *" required onChange={handleChange} value={formData.author} style={styles.input} />
-        <input type="number" name="rating" placeholder="Note" step="0.1" onChange={handleChange} style={styles.input} />
+        <input type="text" name="subGenre" placeholder="Sous-genre" onChange={handleChange} className="addbook-form__form-input" />
+        <textarea name="comment1" placeholder="Commentaire 1" onChange={handleChange} className="addbook-form__form-textarea"></textarea>
+        <textarea name="comment2" placeholder="Commentaire 2" onChange={handleChange} className="addbook-form__form-textarea"></textarea>
+        <input type="text" name="author" placeholder="Auteur *" required onChange={handleChange} value={formData.author} className="addbook-form__form-input" />
+        <input type="number" name="rating" placeholder="Note" step="0.1" onChange={handleChange} className="addbook-form__form-input" />
 
         {formData.cover && (
-          <img src={`http://localhost:8000${formData.cover}`} alt="Jaquette du livre" style={{ width: "150px", marginTop: "10px" }} />
+          <img src={`http://localhost:8000${formData.cover}`} alt="Jaquette du livre" className="addbook-form__cover" />
         )}
 
-        <button type="submit" style={styles.button}>Ajouter</button>
+        <button type="submit" className="addbook-form__submit-button">Ajouter</button>
       </form>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    padding: "20px",
-    backgroundColor: "#121212",
-    minHeight: "100vh",
-    color: "white",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
-  input: {
-    padding: "10px",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
-    backgroundColor: "#1e1e1e",
-    color: "white",
-  },
-  textarea: {
-    padding: "10px",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
-    backgroundColor: "#1e1e1e",
-    color: "white",
-    resize: "vertical",
-    minHeight: "60px",
-  },
-  button: {
-    padding: "12px",
-    backgroundColor: "#4caf50",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-  },
-  suggestions: {
-    backgroundColor: "#1e1e1e",
-    border: "1px solid #333",
-    borderRadius: "5px",
-    listStyle: "none",
-    padding: "5px",
-    margin: "5px 0",
-    maxHeight: "200px",
-    overflowY: "auto",
-  },
-  suggestionItem: {
-    padding: "8px",
-    cursor: "pointer",
-    borderBottom: "1px solid #333",
-  },
-};
 
 export default AddBook;

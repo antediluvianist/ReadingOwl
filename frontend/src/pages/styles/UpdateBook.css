@@ -1,0 +1,32 @@
+.updatebook-container {
+    padding: 20px;
+    background-color: #121212;
+    min-height: 100vh;
+    color: white;
+  }
+  
+  .updatebook-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .updatebook-form input,
+  .updatebook-form textarea {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #1e1e1e;
+    color: white;
+  }
+  
+  .updatebook-button {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  

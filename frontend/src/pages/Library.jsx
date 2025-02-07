@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getBooks, updateBook } from "../services/api";
 import BookCard from "../components/BookCard";
 import SideMenu from "../components/SideMenu";
+import "./styles/Library.css";
 
 function Library() {
   const [books, setBooks] = useState([]);
@@ -41,12 +42,11 @@ function Library() {
   };
 
   useEffect(() => {
-    document.body.style.margin = "0"; // Solution temporaire pour supprimer les marges
-    document.documentElement.style.margin = "0"; // Solution temporaire pour supprimer les marges
+    document.body.style.margin = "0";
+    document.documentElement.style.margin = "0";
     const fetchBooks = async () => {
       const booksData = await getBooks();
       setBooks(booksData);
-      //console.log(books);
       booksData.forEach((book) => {
         if (!book.cover && book.coverUrl) {
           updateCover(book);
@@ -93,12 +93,12 @@ function Library() {
     : sortedBooks.filter((book) => book.genre1 === selectedCategory || book.genre2 === selectedCategory);
 
   return (
-    <div style={styles.libraryContainer}>
+    <div className="library-container">
       <SideMenu onCategorySelect={setSelectedCategory} />
-      <div style={styles.libraryContent}>
+      <div className="library-content">
         <h1>Ma Bibliothèque</h1>
-        <div style={styles.inputContainer}>
-          <select id="sort-select" value={sortOption} onChange={handleSortChange} style={styles.select}>
+        <div className="input-container">
+          <select id="sort-select" value={sortOption} onChange={handleSortChange} className="sort-select">
             <option value="date_recent">Trier par: Date de lecture (plus récent)</option>
             <option value="date_old">Trier par: Date de lecture (plus ancien)</option>
             <option value="title_asc">Trier par: Ordre alphabétique (A-Z)</option>
@@ -113,11 +113,11 @@ function Library() {
             placeholder="Rechercher un livre..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={styles.input}
+            className="search-input"
           />
-          <button onClick={() => window.location.href = "/add-book"} style={styles.button}>Ajouter un Livre</button>
+          <button onClick={() => window.location.href = "/add-book"} className="add-button">Ajouter un Livre</button>
         </div>
-        <div style={styles.grid}>
+        <div className="book-grid">
           {filteredBooks
             .filter((book) =>
               book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -131,57 +131,5 @@ function Library() {
     </div>
   );
 }
-
-const styles = {
-  libraryContainer: {
-    display: "flex",
-    backgroundColor: "#111111",
-    minHeight: "100vh",
-    color: "white",
-  },
-  libraryContent: {
-    flex: 1,
-    padding: "20px",
-  },
-  inputContainer: {
-    display: "flex",
-    gap: "10px",
-    marginBottom: "20px",
-    alignItems: "center",
-  },
-  select: {
-    padding: "10px",
-    borderRadius: "5px",
-    border: "0px solid #ccc",
-    backgroundColor: "#292929",
-    color: "#676767",
-    outline: "none",
-  },
-  input: {
-    flex: 1,
-    padding: "12px",
-    borderRadius: "25px",
-    border: "0px solid #ccc",
-    backgroundColor: "#1b1b1b",
-    color: "#484848",
-    outline: "none",
-  },
-  button: {
-    padding: "12px 20px",
-    backgroundColor: "#55e77c",
-    color: "white",
-    border: "none",
-    borderRadius: "25px",
-    cursor: "pointer",
-    transition: "background-color 0.3s",
-  },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-    gap: "30px",
-    padding: "10px",
-  },
-};
-
 
 export default Library;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getBook, updateBook } from "../services/api";
+import "./styles/UpdateBook.css";
 
 function UpdateBook() {
   const { id } = useParams();
@@ -25,7 +26,7 @@ function UpdateBook() {
     const fetchBook = async () => {
       const book = await getBook(id);
       if (book) {
-        setFormData(book);  // Remplir le formulaire avec les données du livre
+        setFormData(book);
       }
     };
     fetchBook();
@@ -41,14 +42,11 @@ function UpdateBook() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // ✅ Conversion des types pour éviter les erreurs
     const formattedData = {
       ...formData,
-      yearRead: parseInt(formData.yearRead, 10), // Assurer que yearRead est bien un entier
-      rating: formData.rating ? parseFloat(formData.rating) : null, // Gérer les notes vides
+      yearRead: parseInt(formData.yearRead, 10),
+      rating: formData.rating ? parseFloat(formData.rating) : null,
     };
-  
     try {
       const updatedBook = await updateBook(id, formattedData);
       if (updatedBook) {
@@ -62,12 +60,11 @@ function UpdateBook() {
       alert("Une erreur est survenue.");
     }
   };
-  
 
   return (
-    <div style={styles.container}>
+    <div className="updatebook-container">
       <h1>Modifier le Livre</h1>
-      <form onSubmit={handleSubmit} style={styles.form}>
+      <form onSubmit={handleSubmit} className="updatebook-form">
         <input type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Titre" required />
         <input type="text" name="author" value={formData.author} onChange={handleChange} placeholder="Auteur" required />
         <input type="number" name="yearRead" value={formData.yearRead} onChange={handleChange} placeholder="Année de lecture" required />
@@ -82,33 +79,10 @@ function UpdateBook() {
         <textarea name="comment2" value={formData.comment2} onChange={handleChange} placeholder="Commentaire 2" />
         <input type="number" name="rating" value={formData.rating} onChange={handleChange} placeholder="Note" />
 
-        <button type="submit" style={styles.button}>💾 Enregistrer</button>
+        <button type="submit" className="updatebook-button">💾 Enregistrer</button>
       </form>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    padding: "20px",
-    backgroundColor: "#121212",
-    minHeight: "100vh",
-    color: "white",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
-  button: {
-    marginTop: "20px",
-    padding: "10px",
-    backgroundColor: "#4caf50",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-  },
-};
 
 export default UpdateBook;
