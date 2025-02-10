@@ -7,74 +7,82 @@ use App\Form\BookType;
 use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/book')]
-final class BookController extends AbstractController{
-    #[Route(name: 'app_book_index', methods: ['GET'])]
-    public function index(BookRepository $bookRepository): Response
+#[Route('/api/books')]
+final class BookController extends AbstractController
+{
+    private EntityManagerInterface $entityManager;
+    private BookRepository $bookRepository;
+
+    public function __construct(EntityManagerInterface $entityManager, BookRepository $bookRepository)
     {
-        return $this->render('book/index.html.twig', [
-            'books' => $bookRepository->findAll(),
-        ]);
+        $this->entityManager = $entityManager;
+        $this->bookRepository = $bookRepository;
     }
 
-    #[Route('/new', name: 'app_book_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    // Récupérer les livres de l'utilisateur connecté
+    #[Route('', name: 'get_user_books', methods: ['GET'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function getUserBooks(): JsonResponse
     {
+        $user = $this->getUser(); // Récupère l'utilisateur connecté
+
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], 401);
+        }
+
+        // Récupérer uniquement les livres appartenant à l'utilisateur
+        $books = $this->bookRepository->findBy(['user' => $user]);
+
+        return $this->json($books, 200, [], ['groups' => 'book:read']);
+    }
+
+    // Ajouter un livre en l'associant à l'utilisateur connecté
+    #[Route('/new', name: 'app_book_new', methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function new(Request $request): JsonResponse
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], 401);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        if (!isset($data['title']) || !isset($data['author'])) {
+            return new JsonResponse(['error' => 'Title and Author are required'], 400);
+        }
+
         $book = new Book();
-        $form = $this->createForm(BookType::class, $book);
-        $form->handleRequest($request);
+        $book->setTitle($data['title']);
+        $book->setAuthor($data['author']);
+        $book->setUser($user); // Associer le livre à l'utilisateur
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($book);
-            $entityManager->flush();
+        $this->entityManager->persist($book);
+        $this->entityManager->flush();
 
-            return $this->redirectToRoute('app_book_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('book/new.html.twig', [
-            'book' => $book,
-            'form' => $form,
-        ]);
+        return new JsonResponse(['message' => 'Book created successfully'], 201);
     }
 
-    #[Route('/{id}', name: 'app_book_show', methods: ['GET'])]
-    public function show(Book $book): Response
+    //  Supprimer un livre en vérifiant que l'utilisateur en est bien le propriétaire
+    #[Route('/{id}', name: 'app_book_delete', methods: ['DELETE'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function delete(Book $book): JsonResponse
     {
-        return $this->render('book/show.html.twig', [
-            'book' => $book,
-        ]);
-    }
+        $user = $this->getUser();
 
-    #[Route('/{id}/edit', name: 'app_book_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Book $book, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(BookType::class, $book);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_book_index', [], Response::HTTP_SEE_OTHER);
+        if ($book->getUser() !== $user) {
+            return new JsonResponse(['error' => 'You do not have permission to delete this book'], 403);
         }
 
-        return $this->render('book/edit.html.twig', [
-            'book' => $book,
-            'form' => $form,
-        ]);
-    }
+        $this->entityManager->remove($book);
+        $this->entityManager->flush();
 
-    #[Route('/{id}', name: 'app_book_delete', methods: ['POST'])]
-    public function delete(Request $request, Book $book, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$book->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($book);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_book_index', [], Response::HTTP_SEE_OTHER);
+        return new JsonResponse(['message' => 'Book deleted successfully'], 200);
     }
 }

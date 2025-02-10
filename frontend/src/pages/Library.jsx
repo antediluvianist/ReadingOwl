@@ -42,20 +42,21 @@ function Library() {
   };
 
   useEffect(() => {
-    document.body.style.margin = "0";
-    document.documentElement.style.margin = "0";
     const fetchBooks = async () => {
       const booksData = await getBooks();
-      setBooks(booksData);
-      booksData.forEach((book) => {
-        if (!book.cover && book.coverUrl) {
-          updateCover(book);
-        }
-      });
+      console.log("Livres récupérés :", booksData);
+      
+      if (Array.isArray(booksData)) {
+        setBooks(booksData);
+      } else {
+        console.error("Erreur: booksData n'est pas un tableau !");
+        setBooks([]);
+      }
     };
-
+  
     fetchBooks();
   }, []);
+  
 
   const handleDeleteBook = (bookId) => {
     setBooks(books.filter((book) => book.id !== bookId));

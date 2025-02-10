@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./styles/SideMenu.css";
+import { getCustomCategories } from "../services/api";
 
 const defaultCategories = [
   { id: "default-1", name: "Toutes" },
@@ -28,15 +29,16 @@ const categoryImages = {
 
 function SideMenu({ onCategorySelect }) {
   const [categories, setCategories] = useState(defaultCategories);
+  const [customCategories, setCustomCategories] = useState([]); // Ajout du useState
   const [selectedCategory, setSelectedCategory] = useState("Toutes");
   const [newCategory, setNewCategory] = useState("");
 
   useEffect(() => {
     const fetchCustomCategories = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/custom-categories");
-        const data = await response.json();
-        setCategories([...defaultCategories, ...data]);
+        const customCategories = await getCustomCategories();
+        setCustomCategories(customCategories);
+        setCategories([...defaultCategories, ...customCategories]); // Fusionner les catégories
       } catch (error) {
         console.error("Erreur lors du chargement des catégories personnalisées :", error);
       }
@@ -58,9 +60,9 @@ function SideMenu({ onCategorySelect }) {
           body: JSON.stringify({ name: newCategory.trim() }),
         });
         if (response.ok) {
-          const updatedResponse = await fetch("http://localhost:8000/api/custom-categories");
-          const updatedData = await updatedResponse.json();
-          setCategories([...defaultCategories, ...updatedData]);
+          const updatedCategories = await getCustomCategories();
+          setCustomCategories(updatedCategories);
+          setCategories([...defaultCategories, ...updatedCategories]); // Mise à jour après ajout
           setNewCategory("");
         }
       } catch (error) {
@@ -75,7 +77,9 @@ function SideMenu({ onCategorySelect }) {
       await fetch(`http://localhost:8000/api/custom-categories/${category.id}`, {
         method: "DELETE",
       });
-      setCategories(categories.filter(cat => cat.id !== category.id));
+      const updatedCategories = customCategories.filter(cat => cat.id !== category.id);
+      setCustomCategories(updatedCategories);
+      setCategories([...defaultCategories, ...updatedCategories]); // Mise à jour après suppression
       setSelectedCategory("Toutes");
     } catch (error) {
       console.error("Erreur lors de la suppression de la catégorie :", error);
