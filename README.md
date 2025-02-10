@@ -1,15 +1,12 @@
 <pre style="line-height:1px">                                                                     
-    _ __ ___  _   _                                                   
-   | '_ ` _ \| | | |                                                  
-   | | | | | | |_| |                                                  
-  _|_|_|_| |_|\__, |   _ _          _______             _             
- |  __ \       __/ |  | (_)        |__   __|           | |            
- | |__) |___  |___/ __| |_ _ __   __ _| |_ __ __ _  ___| | _____ _ __ 
- |  _  // _ \/ _` |/ _` | | '_ \ / _` | | '__/ _` |/ __| |/ / _ \ '__|
- | | \ \  __/ (_| | (_| | | | | | (_| | | | | (_| | (__|   <  __/ |   
- |_|  \_\___|\__,_|\__,_|_|_| |_|\__, |_|_|  \__,_|\___|_|\_\___|_|   
-                                  __/ |                               
-                                 |___/                                
+  _____                _ _              ____           _ 
+ |  __ \              | (_)            / __ \         | |
+ | |__) |___  __ _  __| |_ _ __   __ _| |  | |_      _| |
+ |  _  // _ \/ _` |/ _` | | '_ \ / _` | |  | \ \ /\ / / |
+ | | \ \  __/ (_| | (_| | | | | | (_| | |__| |\ V  V /| |
+ |_|  \_\___|\__,_|\__,_|_|_| |_|\__, |\____/  \_/\_/ |_|
+                                  __/ |                  
+                                 |___/                                                  
 </pre>
 
 ## Présentation
@@ -21,14 +18,15 @@ Projet personnel pour travailler **React** & **Symfony**.<br>
 
 Vous désirez avoir un suivi de vos lectures, et vous ne voulez pas que vos amis se moquent de vous parce que vous utilisez un tableau Excel comme un homme des cavernes ?
 
-Pas de problème **MyReadingTracker** est là pour vous ! 🚀
+Pas de problème **ReadingOwl** est là pour vous ! 🚀
 
-Avec **MyReadingTracker** suivez et archivez toutes vos lectures. Notez les, classez les. Mais pas que !
-Accomplissez aussi des objectifs et des défis de lecture pour gagner des points, remportez des succès et partagez vos avancées avec vos amis (et vos ennemis) !
+Avec **ReadingOwl** suivez et archivez toutes vos lectures. Notez les, classez les. Mais pas que !
+Accomplissez aussi des objectifs et des défis de lecture pour gagner des points, monter de niveau, remportez des succès et partagez vos avancées avec vos amis (et vos ennemis) !
 
 ## MockUp
 
-![mockup on devices with title02](https://github.com/user-attachments/assets/074f134b-9c5a-489e-8af9-7023a9ae6f81)
+![mockup on devices with title03](https://github.com/user-attachments/assets/22e3b20a-25fd-4dac-a939-0a6342933b59)
+
 
 ## Features à venir & avancée du projet 💡
 
@@ -41,6 +39,7 @@ Accomplissez aussi des objectifs et des défis de lecture pour gagner des points
 ✅ Connexion avec Open Library API pour pré-remplir certains des champs et en ajouter d'autres<br>
 ✅ Création des composants React<br>
 <br>
+🔄 Création de compte et connexion sécurisée<br>
 🔄 Polissage des composants React<br>
 🔄 Design frontend<br>
 🔄 Animations<br>
@@ -51,7 +50,6 @@ Accomplissez aussi des objectifs et des défis de lecture pour gagner des points
 ⏳ Système de recommandation de lecture personalisée<br>
 ⏳ Gestion de la PAL (pile à lire)<br>
 ⏳ Gestion d'une wishlist<br>
-⏳ Création de compte et connexion sécurisée<br>
 
 ## Technologies utilisées
 
