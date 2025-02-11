@@ -45,23 +45,30 @@ export const getUserInfo = async () => {
   }
 };
 
-// Récupérer les catégories personnalisées
+// Fonction pour récupérer les catégories personnalisées
 export const getCustomCategories = async () => {
+  const token = sessionStorage.getItem("jwtToken"); // Vérifie que le token est bien utilisé
+  console.log("Token envoyé avec la requête (catégories) :", token); // Debug
+
   try {
     const response = await axios.get(`${API_BASE_URL}/custom-categories`, {
       headers: {
         "Content-Type": "application/json",
-        ...getAuthHeaders(),
+        Authorization: `Bearer ${token}`, // Ajout du token
       },
     });
 
-    console.log("Réponse de getCustomCategories :", response.data);
-    return response.data || []; // Vérification pour éviter une erreur si data est undefined
+    console.log("Réponse de getCustomCategories :", response.data); // Debug
+    return response.data;
   } catch (error) {
-    console.error("Erreur lors du chargement des catégories personnalisées :", error);
+    console.error(
+      "Erreur lors de la récupération des catégories personnalisées :",
+      error.response ? error.response.data : error
+    );
     return [];
   }
 };
+
 
 // Récupérer un livre spécifique par ID
 export const getBook = async (id) => {

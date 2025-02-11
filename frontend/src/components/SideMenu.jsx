@@ -36,15 +36,18 @@ function SideMenu({ onCategorySelect }) {
   useEffect(() => {
     const fetchCustomCategories = async () => {
       try {
-        const customCategories = await getCustomCategories();
-        setCustomCategories(customCategories);
-        setCategories([...defaultCategories, ...customCategories]); // Fusionner les catégories
+        const categories = await getCustomCategories();
+        console.log("Catégories récupérées :", categories); // Debug
+        const updatedCategories = [...defaultCategories, ...categories];
+        console.log("Nouvelle liste des catégories :", updatedCategories); // Debug
+        setCategories(updatedCategories);
       } catch (error) {
         console.error("Erreur lors du chargement des catégories personnalisées :", error);
       }
     };
     fetchCustomCategories();
   }, []);
+  
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category.name);
@@ -54,37 +57,61 @@ function SideMenu({ onCategorySelect }) {
   const handleAddCategory = async () => {
     if (newCategory.trim() && !categories.some(cat => cat.name === newCategory.trim())) {
       try {
+        const token = sessionStorage.getItem("jwtToken"); // Récupère le token
+        console.log("Token envoyé avec la requête :", token); // debug
         const response = await fetch("http://localhost:8000/api/custom-categories", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}` // Ajoute le token
+          },
           body: JSON.stringify({ name: newCategory.trim() }),
         });
-        if (response.ok) {
-          const updatedCategories = await getCustomCategories();
-          setCustomCategories(updatedCategories);
-          setCategories([...defaultCategories, ...updatedCategories]); // Mise à jour après ajout
-          setNewCategory("");
+  
+        if (!response.ok) {
+          throw new Error(`Erreur API : ${response.status}`); // Ajoute plus de détails
         }
+  
+        const updatedResponse = await fetch("http://localhost:8000/api/custom-categories", {
+          headers: {
+            "Authorization": `Bearer ${token}` // Ajoute le token pour la récupération
+          }
+        });
+  
+        const updatedData = await updatedResponse.json();
+        setCategories([...defaultCategories, ...updatedData]);
+        setNewCategory("");
       } catch (error) {
         console.error("Erreur lors de l'ajout de la catégorie :", error);
       }
     }
   };
+  
 
   const handleDeleteCategory = async (category) => {
     if (category.id.toString().startsWith("default-")) return;
+  
     try {
-      await fetch(`http://localhost:8000/api/custom-categories/${category.id}`, {
+      const token = sessionStorage.getItem("jwtToken"); // Récupère le token
+      console.log("Token envoyé avec la requête :", token); // debug
+      const response = await fetch(`http://localhost:8000/api/custom-categories/${category.id}`, {
         method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}` // Ajoute le token
+        }
       });
-      const updatedCategories = customCategories.filter(cat => cat.id !== category.id);
-      setCustomCategories(updatedCategories);
-      setCategories([...defaultCategories, ...updatedCategories]); // Mise à jour après suppression
+  
+      if (!response.ok) {
+        throw new Error(`Erreur API : ${response.status}`);
+      }
+  
+      setCategories(categories.filter(cat => cat.id !== category.id));
       setSelectedCategory("Toutes");
     } catch (error) {
       console.error("Erreur lors de la suppression de la catégorie :", error);
     }
   };
+  
 
   return (
     <div className="sidemenu">
