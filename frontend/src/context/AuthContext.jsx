@@ -5,22 +5,32 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(() => sessionStorage.getItem("jwtToken"));
+  const [isLoading, setIsLoading] = useState(true); // Ajout de l'état de chargement
 
-  // Met à jour sessionStorage dès que le token change
   useEffect(() => {
+    console.log("🔍 Token actuel :", token);
     if (token) {
       sessionStorage.setItem("jwtToken", token);
-      fetchUserProfile(); // Récupérer les infos de l'utilisateur
+      fetchUserProfile();
     } else {
+      console.log("⚠️ Aucun token trouvé, suppression de sessionStorage.");
       sessionStorage.removeItem("jwtToken");
       setUser(null);
+      setIsLoading(false); // Met fin au chargement même si aucun token
     }
   }, [token]);
 
-  // Récupérer les infos de l'utilisateur connecté
   const fetchUserProfile = async () => {
+    if (!token) {
+      console.warn("❌ Tentative de récupération du profil sans token.");
+      setIsLoading(false); // Arrêter le chargement même si pas de token
+      return;
+    }
+
     try {
+      console.log("📡 Requête pour récupérer l'utilisateur...");
       const response = await fetch("http://localhost:8000/api/me", {
+        method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -28,36 +38,37 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (!response.ok) {
-        throw new Error("Échec de la récupération du profil");
+        throw new Error(`Échec de la récupération du profil (Code ${response.status})`);
       }
 
       const data = await response.json();
-      console.log("Utilisateur récupéré :", data);
+      console.log("✅ Utilisateur récupéré :", data);
       setUser(data);
     } catch (error) {
-      console.error("Erreur lors de la récupération du profil :", error);
-      logout(); // Déconnecter en cas d'erreur
+      console.error("❌ Erreur lors de la récupération du profil :", error.message);
+      logout();
+    } finally {
+      setIsLoading(false); // Le chargement est terminé, qu'il y ait une erreur ou non
     }
   };
 
-  // Connexion : sauvegarde le token et récupère l'utilisateur
   const login = (newToken) => {
+    console.log("🔑 Connexion réussie, stockage du token :", newToken);
     setToken(newToken);
   };
 
-  // Déconnexion : supprime tout
   const logout = () => {
+    console.warn("🚪 Déconnexion en cours...");
     sessionStorage.removeItem("jwtToken");
     setToken(null);
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Hook personnalisé pour simplifier l'utilisation de l'authentification
 export const useAuth = () => useContext(AuthContext);
